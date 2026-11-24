@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>의학용어 사전 | Nurse Mate</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .term-search {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .term-search input,
+        .term-search select {
+            padding: 12px;
+            border: 1px solid #dce8e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .term-search input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .term-search button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            background: #4c947d;
+            color: white;
+            cursor: pointer;
+        }
+
+        .term-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .term-card {
+            background: white;
+            border: 1px solid #e2ebe5;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .term-category {
+            color: #4c947d;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .term-card h3 {
+            margin: 12px 0 5px;
+        }
+
+        .term-english {
+            color: #718078;
+            font-size: 14px;
+        }
+
+        .term-pronunciation {
+            color: #4c947d;
+            margin-top: 10px;
+        }
+
+        .term-description {
+            color: #53635a;
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        .term-count {
+            color: #718078;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Nurse Mate</h2>
+            <nav>
+    <a href="/">대시보드</a>
+    <a href="/skills">간호 술기 학습</a>
+    <a href="/clinical-logs">임상실습 기록</a>
+    <a href="/checklist">학습 체크리스트</a>
+    <a href="/practice-schedules">실습 일정 관리</a>
+    <a href="/quiz">간호 퀴즈</a>
+    <a href="/medical-terms">의학용어 사전</a>
+    <a href="/logout">로그아웃</a>
+</nav>
+        </aside>
+
+        <main class="main-content">
+            <h1>간호 의학용어 사전</h1>
+            <p>간호학 학습에 필요한 의학용어를 검색하고 복습해 보세요.</p>
+
+            <section class="card">
+                <form action="/medical-terms" method="GET" class="term-search">
+                    <input
+                        type="text"
+                        name="keyword"
+                        value="<%= keyword %>"
+                        placeholder="영어, 한글 뜻, 발음으로 검색하세요."
+                    >
+
+                    <select name="category">
+                        <option value="">전체 과목</option>
+                        <% categories.forEach(item => { %>
+                            <option
+                                value="<%= item.category %>"
+                                <%= selectedCategory === item.category ? 'selected' : '' %>
+                            >
+                                <%= item.category %>
+                            </option>
+                        <% }) %>
+                    </select>
+
+                    <button type="submit">검색</button>
+                    <a href="/medical-terms">초기화</a>
+                </form>
+
+                <p class="term-count">
+                    검색 결과 <strong><%= terms.length %></strong>개
+                </p>
+            </section>
+
+            <section class="term-list">
+                <% if (terms.length === 0) { %>
+                    <div class="card">
+                        검색 결과가 없습니다.
+                    </div>
+                <% } else { %>
+                    <% terms.forEach(term => { %>
+                        <article class="term-card">
+                            <span class="term-category">
+                                <%= term.category %>
+                            </span>
+
+                            <h3><%= term.korean %></h3>
+
+                            <p class="term-english">
+                                <%= term.english %>
+                            </p>
+
+                            <p class="term-pronunciation">
+                                발음: <%= term.pronunciation || '미등록' %>
+                            </p>
+
+                            <p class="term-description">
+                                <%= term.description || '등록된 설명이 없습니다.' %>
+                            </p>
+                        </article>
+                    <% }) %>
+                <% } %>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

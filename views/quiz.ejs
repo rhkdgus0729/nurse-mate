@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간호 퀴즈 | Nurse Mate</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Nurse Mate</h2>
+            <nav>
+    <a href="/">대시보드</a>
+    <a href="/skills">간호 술기 학습</a>
+    <a href="/clinical-logs">임상실습 기록</a>
+    <a href="/checklist">학습 체크리스트</a>
+    <a href="/practice-schedules">실습 일정 관리</a>
+    <a href="/quiz">간호 퀴즈</a>
+    <a href="/medical-terms">의학용어 사전</a>
+    <a href="/logout">로그아웃</a>
+</nav>
+        </aside>
+
+        <main class="main-content">
+            <h1>간호 퀴즈</h1>
+            <p>간호학 지식을 문제를 풀면서 복습해 보세요.</p>
+
+            <% if (result) { %>
+                <section class="card">
+                    <h2>퀴즈 결과</h2>
+                    <h1><%= result.score %> / <%= result.total %>점</h1>
+                    <p>
+                        정답률:
+                        <%= result.total === 0 ? 0 : Math.round(result.score / result.total * 100) %>%
+                    </p>
+                    <a href="/quiz">다시 풀기</a>
+                </section>
+            <% } %>
+
+            <% if (questions.length === 0) { %>
+                <section class="card">
+                    <p>등록된 문제가 없습니다.</p>
+                </section>
+            <% } else { %>
+                <form action="/quiz/submit" method="POST">
+                    <% questions.forEach((question, index) => { %>
+                        <section class="card">
+                            <p><strong><%= question.category %></strong></p>
+                            <h3><%= index + 1 %>. <%= question.question %></h3>
+
+                            <% const options = [
+                                question.option1,
+                                question.option2,
+                                question.option3,
+                                question.option4
+                            ]; %>
+
+                            <% options.forEach((option, optionIndex) => { %>
+                                <div>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="answers[<%= question.id %>]"
+                                            value="<%= optionIndex + 1 %>"
+                                            <%= result && result.details.find(d => d.id === question.id).selected === optionIndex + 1 ? 'checked' : '' %>
+                                            <%= result ? 'disabled' : '' %>
+                                            required
+                                        >
+                                        <%= optionIndex + 1 %>. <%= option %>
+                                    </label>
+                                </div>
+                            <% }); %>
+
+                            <% if (result) { %>
+                                <% const detail = result.details.find(d => d.id === question.id); %>
+                                <hr>
+                                <p>
+                                    <strong>
+                                        <%= detail.isCorrect ? '정답입니다!' : '오답입니다.' %>
+                                    </strong>
+                                </p>
+                                <p>정답: <%= detail.answer %>번</p>
+                                <p>해설: <%= detail.explanation || '등록된 해설이 없습니다.' %></p>
+                            <% } %>
+                        </section>
+                    <% }); %>
+
+                    <% if (!result) { %>
+                        <button type="submit">정답 제출하기</button>
+                    <% } %>
+                </form>
+            <% } %>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= skill.title %> | Nurse Mate</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .detail-header {
+            margin-bottom: 25px;
+        }
+
+        .detail-category {
+            display: inline-block;
+            background: #eaf4ee;
+            color: #43866b;
+            padding: 6px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .detail-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .detail-header p {
+            color: #829087;
+            font-size: 15px;
+        }
+
+        .detail-card {
+            background: white;
+            border: 1px solid #e8eee9;
+            border-radius: 15px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+
+        .detail-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #326b54;
+        }
+
+        .detail-card p {
+            color: #526158;
+            font-size: 14px;
+            line-height: 1.9;
+            white-space: pre-line;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #43866b;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .complete-area {
+            background: white;
+            border: 1px solid #e8eee9;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .complete-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 9px;
+            background: #43866b;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .complete-button:hover {
+            background: #326b54;
+        }
+
+        .completed-message {
+            color: #43866b;
+            font-weight: 700;
+            text-align: center;
+            padding: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+
+        <aside class="sidebar">
+            <h2>Nurse Mate</h2>
+            <p>간호학과 학생을 위한 실습 파트너</p>
+
+            <nav>
+    <a href="/">대시보드</a>
+    <a href="/skills">간호 술기 학습</a>
+    <a href="/clinical-logs">임상실습 기록</a>
+    <a href="/checklist">학습 체크리스트</a>
+    <a href="/practice-schedules">실습 일정 관리</a>
+    <a href="/quiz">간호 퀴즈</a>
+    <a href="/medical-terms">의학용어 사전</a>
+    <a href="/logout">로그아웃</a>
+</nav>
+        </aside>
+
+        <main class="main-content">
+
+            <header>
+                <div>
+                    <h1>간호 술기 학습</h1>
+                    <p>술기의 핵심 내용을 확인해 보세요.</p>
+                </div>
+
+                <div>
+                    <span><%= user.name %>님</span>
+                    <a href="/logout">로그아웃</a>
+                </div>
+            </header>
+
+            <a href="/skills" class="back-button">
+                ← 술기 목록으로 돌아가기
+            </a>
+
+            <section class="detail-header">
+                <span class="detail-category">
+                    <%= skill.category %>
+                </span>
+
+                <h2><%= skill.title %></h2>
+                <p><%= skill.description || '등록된 설명이 없습니다.' %></p>
+            </section>
+
+            <section class="detail-card">
+                <h3>준비물</h3>
+                <p><%= skill.supplies || '등록된 준비물이 없습니다.' %></p>
+            </section>
+
+            <section class="detail-card">
+                <h3>수행 절차</h3>
+                <p><%= skill.procedure_text || '등록된 수행 절차가 없습니다.' %></p>
+            </section>
+
+            <section class="detail-card">
+                <h3>주의사항</h3>
+                <p><%= skill.precautions || '등록된 주의사항이 없습니다.' %></p>
+            </section>
+
+            <section class="complete-area">
+                <% if (completed) { %>
+                    <p class="completed-message">
+                        ✓ 학습 완료한 술기입니다!
+                    </p>
+                <% } else { %>
+                    <form action="/skills/<%= skill.id %>/complete" method="POST">
+                        <button type="submit" class="complete-button">
+                            학습 완료하기
+                        </button>
+                    </form>
+                <% } %>
+            </section>
+
+        </main>
+    </div>
+</body>
+</html>

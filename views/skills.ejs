@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간호 술기 학습 | Nurse Mate</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .skills-header {
+            margin-bottom: 30px;
+        }
+
+        .skills-header h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .skills-header p {
+            color: #829087;
+            font-size: 14px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .skill-card {
+            background: white;
+            border: 1px solid #e8eee9;
+            border-radius: 15px;
+            padding: 25px;
+            transition: 0.2s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(35, 70, 48, 0.07);
+        }
+
+        .skill-category {
+            display: inline-block;
+            background: #eaf4ee;
+            color: #43866b;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .skill-card h3 {
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+        .skill-card p {
+            color: #829087;
+            font-size: 14px;
+            min-height: 45px;
+        }
+
+        .skill-card a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #43866b;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 700px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <h2>Nurse Mate</h2>
+            <p>간호학과 학생을 위한 실습 파트너</p>
+
+            <nav>
+    <a href="/">대시보드</a>
+    <a href="/skills">간호 술기 학습</a>
+    <a href="/clinical-logs">임상실습 기록</a>
+    <a href="/checklist">학습 체크리스트</a>
+    <a href="/practice-schedules">실습 일정 관리</a>
+    <a href="/quiz">간호 퀴즈</a>
+    <a href="/medical-terms">의학용어 사전</a>
+    <a href="/logout">로그아웃</a>
+</nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <div>
+                    <h1>간호 술기 학습</h1>
+                    <p>핵심 간호 술기를 확인하고 학습해 보세요.</p>
+                </div>
+
+                <div>
+                    <span><%= user.name %>님</span>
+                    <a href="/logout">로그아웃</a>
+                </div>
+            </header>
+
+            <section class="skills-header">
+                <h2>기본간호 술기</h2>
+                <p>현재 등록된 술기: <%= skills.length %>개</p>
+            </section>
+
+            <section class="skills-grid">
+                <% skills.forEach(skill => { %>
+                    <article class="skill-card">
+                        <span class="skill-category">
+                            <%= skill.category %>
+                        </span>
+
+                        <h3><%= skill.title %></h3>
+
+                        <p><%= skill.description %></p>
+
+                        <a href="/skills/<%= skill.id %>">
+                            자세히 보기 →
+                        </a>
+                    </article>
+                <% }) %>
+            </section>
+
+            <% if (skills.length === 0) { %>
+                <p>등록된 간호 술기가 없습니다.</p>
+            <% } %>
+        </main>
+    </div>
+</body>
+</html>
+

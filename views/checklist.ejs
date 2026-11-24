@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학습 체크리스트 | Nurse Mate</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .check-progress {
+            background: #eaf4ee;
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+        .progress-track {
+            height: 12px;
+            background: #d5e5da;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #43866b;
+            border-radius: 20px;
+            transition: width .3s;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: white;
+            border: 1px solid #e5ece7;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+        }
+        .check-item h3 {
+            margin-bottom: 4px;
+        }
+        .check-item p {
+            color: #829087;
+            font-size: 13px;
+        }
+        .check-item form {
+            flex-shrink: 0;
+        }
+        .check-item button {
+            min-width: 105px;
+        }
+        .done-label {
+            color: #43866b;
+            font-weight: 700;
+        }
+        @media(max-width: 560px) {
+            .check-item {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Nurse Mate</h2>
+            <nav>
+                <a href="/">대시보드</a>
+                <a href="/skills">간호 술기 학습</a>
+                <a href="/clinical-logs">임상실습 기록</a>
+                <a href="/checklist">학습 체크리스트</a>
+                <a href="/practice-schedules">실습 일정 관리</a>
+                <a href="/quiz">간호 퀴즈</a>
+                <a href="/medical-terms">의학용어 사전</a>
+                <a href="/logout">로그아웃</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <h1>학습 체크리스트</h1>
+            <p>간호 술기 학습 상태를 체크하고 나의 학습 진행률을 확인하세요.</p>
+
+            <section class="check-progress">
+                <h2>나의 학습 진행률</h2>
+                <h1><%= progressRate %>%</h1>
+                <p><%= completedCount %>개 완료 / 전체 <%= totalCount %>개</p>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: <%= progressRate %>%"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2>전체 간호 술기</h2>
+
+                <% if (skills.length === 0) { %>
+                    <div class="card">등록된 간호 술기가 없습니다.</div>
+                <% } else { %>
+                    <% skills.forEach(skill => { %>
+                        <article class="check-item">
+                            <div>
+                                <p><%= skill.category %></p>
+                                <h3><%= skill.title %></h3>
+                                <p><%= skill.description || '술기 내용을 확인하고 학습해 보세요.' %></p>
+                                <% if (Number(skill.completed) === 1) { %>
+                                    <span class="done-label">✓ 학습 완료</span>
+                                <% } else { %>
+                                    <span>아직 완료하지 않았어요.</span>
+                                <% } %>
+                            </div>
+
+                            <form action="/checklist/<%= skill.id %>/toggle" method="POST">
+                                <button type="submit">
+                                    <%= Number(skill.completed) === 1 ? '완료 취소' : '학습 완료' %>
+                                </button>
+                            </form>
+                        </article>
+                    <% }) %>
+                <% } %>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
